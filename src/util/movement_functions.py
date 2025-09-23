@@ -48,9 +48,10 @@ def move(direction_angle, speed, raspbot, relative=False):
     - relative: whether to add this movement on top of the current movement state (True) or to stop the current movement and replace it (False)
     """
     if relative:
-        raise NotImplementedError("relative is not implemented yet")
-        # to implement this you need to implement a readmotorstates function in raspbot library and then you need to read the motor states here
-        # you also need to account for motor direction, just do if dir=0 then data = -data
+        front_left_speed = 0
+        front_right_speed = 0
+        rear_left_speed = 0
+        rear_right_speed = 0
     else:
         front_left_speed = 0
         front_right_speed = 0

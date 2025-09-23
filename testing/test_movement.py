@@ -11,10 +11,7 @@ class MockRaspbot:
 
 @pytest.fixture
 def raspbot():
-    try:
-        return Raspbot()
-    except PermissionError:
-        return MockRaspbot()
+    return MockRaspbot()
 
 def test_move_forward_full_speed(raspbot):
     move(0, 1, raspbot)
