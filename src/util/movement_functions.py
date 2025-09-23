@@ -1,28 +1,20 @@
 import math
 
-def turn(turn_direction, speed, raspbot, relative=False):
+def turn(turn_direction, speed, raspbot):
     """Turn the car at a given speed.
     - turn_direction: 0 or 1
     - speed: speed, float, [0,1]
+    TODO: maybe add relative here as well
     """
-    if relative:
-        raise NotImplementedError("relative is not implemented yet")
-        # to implement this you need to implement a readmotorstates function in raspbot library and then you need to read the motor states here
-        # you also need to account for motor direction, just do if dir=0 then data = -data
-    else:
-        front_left_speed = 0
-        front_right_speed = 0
-        rear_left_speed = 0
-        rear_right_speed = 0
 
     # normalize turn direction
     turn_direction = turn_direction*2-1
 
     # calculate speeds
-    front_left_speed += turn_direction * 255 * speed 
-    front_right_speed += turn_direction * 255 * speed
-    rear_left_speed -= turn_direction * 255 * speed
-    rear_right_speed -= turn_direction * 255 * speed
+    front_left_speed = turn_direction * 255 * speed 
+    front_right_speed = turn_direction * 255 * speed
+    rear_left_speed = -turn_direction * 255 * speed
+    rear_right_speed = -turn_direction * 255 * speed
 
     # normalize speeds to max 255
     speeds = normalize_speeds_to_255(front_left_speed, front_right_speed, rear_left_speed, rear_right_speed)
@@ -48,10 +40,10 @@ def move(direction_angle, speed, raspbot, relative=False):
     - relative: whether to add this movement on top of the current movement state (True) or to stop the current movement and replace it (False)
     """
     if relative:
-        front_left_speed = 0
-        front_right_speed = 0
-        rear_left_speed = 0
-        rear_right_speed = 0
+        front_left_speed = raspbot.motor_states[0][1] if raspbot.motor_states[0][0]==1 else -raspbot.motor_states[0][1] 
+        front_right_speed = raspbot.motor_states[1][1] if raspbot.motor_states[1][0]==1 else -raspbot.motor_states[1][1] 
+        rear_left_speed = raspbot.motor_states[2][1] if raspbot.motor_states[2][0]==1 else -raspbot.motor_states[2][1] 
+        rear_right_speed = raspbot.motor_states[3][1] if raspbot.motor_states[3][0]==1 else -raspbot.motor_states[3][1] 
     else:
         front_left_speed = 0
         front_right_speed = 0

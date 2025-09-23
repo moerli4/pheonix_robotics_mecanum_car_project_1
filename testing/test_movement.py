@@ -1,5 +1,4 @@
 import pytest, math
-from src.util.Raspbot_Library import Raspbot
 from src.util.movement_functions import turn, move, stop_motors
 
 class MockRaspbot:
@@ -50,6 +49,18 @@ def test_turn(raspbot):
 def test_stop_motors(raspbot):
     stop_motors(raspbot)
     assert raspbot.motor_states == [(1, 0), (1, 0), (1, 0), (1, 0)]
+
+def test_relative_movement_full_speed(raspbot):
+    move(0, 1, raspbot)
+    move(90, 1, raspbot,relative=True)
+    # forward + right = diagonal right
+    assert raspbot.motor_states == [(1,255), (1,0), (1,0), (1,255)]
+
+def test_relative_movement_half_speed(raspbot):
+    move(0, 1, raspbot)
+    move(90, 0.5, raspbot,relative=True)
+    # forward + right = diagonal right
+    assert raspbot.motor_states == [(1,255), (1,85), (1,85), (1,255)]
 
 if __name__ == "__main__":
     pytest.main()
