@@ -6,7 +6,7 @@ import math
 
 PI5Car_I2CADDR = 0x2B
 class Raspbot():
-
+    # init
     def get_i2c_device(self, address, i2c_bus):
         self._addr = address
         if i2c_bus is None:
@@ -17,7 +17,9 @@ class Raspbot():
     def __init__(self):
         # Create I2C device.
         self._device = self.get_i2c_device(PI5Car_I2CADDR, 1)
+        self.motor_states = [(1,0),(1,0),(1,0),(1,0)] # state of the motors
 
+    # core smbus functions
     def write_u8(self, reg, data):
         try:
             self._device.write_byte_data(self._addr, reg, data)
@@ -51,7 +53,7 @@ class Raspbot():
         except:
             print ('read_u8 I2C error')
 
-
+    # control functions
     def Ctrl_Car(self, motor_id, motor_dir,motor_speed):
         try:
             if(motor_dir !=1)and(motor_dir != 0):  
@@ -64,6 +66,7 @@ class Raspbot():
             reg = 0x01
             data = [motor_id, motor_dir, motor_speed]
             self.write_array(reg, data)
+            self.motor_states[motor_id] = (motor_dir,motor_speed)
         except:
             print ('Ctrl_Car I2C error')
 
